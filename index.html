@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -33,8 +32,116 @@
             transition: all 0.2s ease-out;
             position: relative;
         }
-        .success-animation {
-            animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Stile per l'overlay di blocco */
+        #orientation-overlay {
+            display: none; /* Nascosto di default, gestito da JS */
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div id="orientation-overlay" class="fixed inset-0 z-[100] bg-rose-500/90 flex flex-col items-center justify-center text-white p-6 text-center">
+        <div class="animate-bounce mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M0 12.5v-9A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-bold mb-2 font-romantic">Esperienza Immersiva</h2>
+        <p class="mb-6 opacity-90">Per visualizzare la sorpresa, ruota il telefono in orizzontale e attiva lo schermo intero.</p>
+        <button onclick="enableExperience()" class="bg-white text-rose-500 px-8 py-3 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">
+            ATTIVA ORA
+        </button>
+    </div>
+
+    <div id="heart-container"></div>
+    <div id="main-card" class="relative z-10 w-full max-w-sm mx-4 bg-white/80 backdrop-blur-md p-8 rounded-[2rem] shadow-2xl border border-rose-100 text-center">
+        <div id="question-state">
+            <h1 class="text-3xl font-romantic text-rose-600 mb-8 leading-tight">Vuoi essere il mio San Valentino?</h1>
+            <div class="flex flex-wrap justify-center gap-4 items-center">
+                <button id="si-button" onclick="accept()" class="bg-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-rose-600 transition-colors z-20">Sì!</button>
+                <button id="no-button" onmouseover="moveNoButton()" onclick="moveNoButton()" class="bg-gray-100 text-gray-600 px-6 py-2 rounded-full font-semibold z-20">No</button>
+            </div>
+        </div>
+        <div id="success-state" class="hidden">
+            <h1 class="text-4xl font-romantic text-rose-600 mb-4">Sapevo che avresti detto di sì! ❤️</h1>
+            <p class="text-rose-400 font-medium">Ti amo immensamente!</p>
+        </div>
+    </div>
+
+    <script>
+        // Funzione per gestire il Fullscreen e il controllo orientamento
+        function checkStatus() {
+            const overlay = document.getElementById('orientation-overlay');
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isFullscreen = document.fullscreenElement;
+
+            // Su mobile, mostriamo l'overlay se non è in landscape O non è in fullscreen
+            if (window.innerWidth < 1024) { // Solo su dispositivi mobili/tablet
+                if (!isLandscape || !isFullscreen) {
+                    overlay.style.display = 'flex';
+                } else {
+                    overlay.style.display = 'none';
+                }
+            }
+        }
+
+        async function enableExperience() {
+            try {
+                // Attiva Fullscreen
+                if (document.documentElement.requestFullscreen) {
+                    await document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    await document.documentElement.webkitRequestFullscreen();
+                }
+                
+                // Una volta cliccato, controlliamo l'orientamento
+                checkStatus();
+            } catch (err) {
+                console.log("Errore attivazione: ", err);
+            }
+        }
+
+        // Eventi di controllo
+        window.addEventListener('resize', checkStatus);
+        window.addEventListener('load', checkStatus);
+        document.addEventListener('fullscreenchange', checkStatus);
+
+        // Logica originale del sito
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            document.getElementById('heart-container').appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 300);
+
+        function moveNoButton() {
+            const btn = document.getElementById('no-button');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            
+            // Ingrandisce il tasto SI
+            const siBtn = document.getElementById('si-button');
+            const currentSize = parseFloat(window.getComputedStyle(siBtn).fontSize);
+            siBtn.style.fontSize = (currentSize + 2) + 'px';
+            siBtn.style.padding = (parseFloat(window.getComputedStyle(siBtn).paddingLeft) + 5) + 'px';
+        }
+
+        function accept() {
+            document.getElementById('question-state').classList.add('hidden');
+            document.getElementById('success-state').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>            animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         @keyframes zoomIn {
             from { opacity: 0; transform: scale(0.5); }
