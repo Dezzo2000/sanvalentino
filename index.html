@@ -47,7 +47,7 @@
     <!-- Floating Background Hearts -->
     <div id="heart-container"></div>
 
-    <div id="main-card" class="relative z-10 w-full max-w-[450px] max-h-[400px] mx-4 bg-white/80 backdrop-blur-md p-5 rounded-[1.5rem] shadow-2xl border border-rose-100 text-center">
+    <div id="main-card" class="relative z-10 w-full max-w-sm mx-4 bg-white/80 backdrop-blur-md p-8 rounded-[2rem] shadow-2xl border border-rose-100 text-center">
         
         <div id="question-state">
             <div class="mb-6 text-rose-500 flex justify-center">
@@ -108,7 +108,7 @@
 
         let pxNoBtn = 12;
         let pyNoBtn = 4;
-        let pxSiBtn = 12;
+        let pySiBtn = 12;
 
         function resizeButton() {
             const btnNo = document.getElementById('no-button');
@@ -116,14 +116,14 @@
             
             btnNo.classList.remove(`px-${pxNoBtn}`);
             btnNo.classList.remove(`py-${pyNoBtn}`);
-            pyNoBtn -= 1;
+            pyNoBtn -= 4;
             pxNoBtn -= 4;
             btnNo.classList.add(`px-${pxNoBtn}`);
             btnNo.classList.add(`py-${pyNoBtn}`);
-            btnSi.classList.remove(`px-${pxSiBtn}`);
-            if(pxSiBtn<60)
-                pxSiBtn += 8;
-            btnSi.classList.add(`px-${pxSiBtn}`);
+            btnSi.classList.remove(`py-${pySiBtn}`);
+            if(pySiBtn<60)
+                pySiBtn += 8;
+            btnSi.classList.add(`py-${pySiBtn}`);
             
         }
 
